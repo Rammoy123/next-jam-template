@@ -9,27 +9,231 @@ body {
 * {
   box-sizing: border-box;
 }
+ul{
+display: block;
+text-align: left;
+height: 100vh;
+width: 200px;
+top: 0;
+/* right: -400px; */
+position: fixed;
+background:white;
+border:1px dotted rgb(46, 42, 42);
+z-index: 10;
+/* height: 100vh; */
+overflow: hidden;
+/* left: -500px; */
+transition: all 1s ease-out;
+display: flex;
+flex-direction: column;
+/* margin-top: 4.2rem; */
+}
+li{
 
-main {
-  padding: 5rem 0;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  list-style: none;
+  text-decoration: none;
+  color:#099;
+  font-size: 12px;
+  margin-bottom: 22px;
+  
+
+
+
+  /* color:red */
 }
 
-code {
-  background: #fafafa;
-  border-radius: 5px;
-  padding: 0.75rem;
-  font-family: Menlo, Monaco, Lucida Console, Courier New, monospace;
+li a{
+  text-decoration: none;
+  color:#099 !important ;
+  font-size: 18px;
+  font-weight:600
+
+}
+/* li a:hover{
+  color:#099 ;
+} */
+.image-last{
+
+  height: 70px;
+  /* -o-object-fit: cover; */
+  object-fit: cover;
+}
+.photo-div{
+  width:100px;
+  height:40px;
+  margin-bottom: 35px;
+
+}
+.li-item a{
+  /* border-bottom:1px dotted rgb(46, 42, 42); */
+
+}
+.form-controller{
+padding: 8px 4px;
+font-size: 19px;
+letter-spacing: 1px;
+background-color: transparent!important;
+border: 1px solid #ddd;
+/* border-bottom: 1px solid #ddd; */
+font-family: Source Sans Pro,sans-serif;
+border-radius: 0;
+color: #555;
+transition: border-color .15s ease-in-out;
+margin-bottom: 12px;
+font-weight: 300;
+display: block;
+width: 100%;
+height: calc(1.5em + 0.75rem + 2px);
+margin-top: 10px;
 }
 
-.container {
-  height: 100vh;
+input:focus{
+  outline: none;
+}
+
+.sec-section{
+  /* position: absolute; */
+  margin-left:250px;
+
+  margin-right:50px;
+  margin-top:70px
+}
+/* .relativeError {
+  margin-bottom: 10px;
+} */
+.activeonly{
+  color:black !important
+}
+.borderFor{
+  border: 1px ridge ;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+ 
+}
+.borderFor p{
+  margin-top: 10px;
+}
+.bold p{
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  margin-top: 10px;
+
+}
+
+  .child{
+  /* border: 1px ridge ; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+ .sec-flex .photo img{
+  object-fit: cover;
+  /* width:100% */
+  height: 50px;
+  width:70px;
+  margin-left: 10px; 
+
+}
+ .sec-flex .child p{
+  margin-left: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  
+}
+ .action p button{
+  padding: 7px 20px;
+  background-color: #099 ;
+  color: white;
+  font-size: 15px;
+  border: none;
+  border-radius: 8px;
+}
+ .action{
+  position: relative;
+}
+
+
+/* .sec:nth-child(3) .sec-flexi .child2 p{
+  margin-left: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.sec:nth-child(3) .sec-flex .head p{
+  font-weight: bold;
+ 
+}
+.sec:nth-child(3) .sec-flexi .head2 p{
+  font-weight: bold;
+ 
+}
+.sec:nth-child(3) .sec-flex .action p button{
+  padding: 10px 20px;
+  background-color: goldenrod;
+  color: white;
+  font-size: 15px;
+  border: none;
+  border-radius: 8px;
+}
+.sec:nth-child(3) .sec-flexi .action p button{
+  padding: 10px 20px;
+  background-color: goldenrod;
+  color: white;
+  font-size: 15px;
+  border: none;
+  border-radius: 8px;
+} */
+/* .sec:nth-child(3) .sec-flex .action{
+  position: relative;
+}
+.sec:nth-child(3) .sec-flexi .action{
+  position: relative;
+} */
+
+
+/* .sec:nth-child(3) .sec-parent select{
+  width:40px;
+  height:30px;
+  font-size: 14px;
+  width:4.75rem;
+  height: 32px;
+} */
+
+
+
+/* .sec:nth-child(3) .sec-parent P{
+  font-weight:540 ;
+  font-size: 17px ;
+}
+.sec:nth-child(3) .sec-parent{
+  margin-left: 12px;
+  margin-bottom: 25px;
+  position: relative;
+} */
+
+
+
+ .action select{
+position: absolute;
+/* left:85px; */
+
+width: 20px;
+top:10.1px;
+height: 37px;
+background-color: #099 ;
+color: white;
+font-size: 12px;
+border-top-right-radius: 8px;
+border-bottom-right-radius: 8px;
+right:33px;
+outline:none;
+
+
+}
+ .action select option:hover{
+border-style: none;
+}
+
+
+ .action select option:hover{
+border-style: none;
 }
