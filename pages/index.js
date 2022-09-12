@@ -1,6 +1,7 @@
 import bitpastel from '../public/assets/bitpastel.png'
 import { useState, useEffect } from 'react'
 import { db } from '@components/Firebase-config'
+import Skateboard from '../public/assets/Skateboarding (1).gif'
 import {
   getFirestore,
   collection,
@@ -8,10 +9,14 @@ import {
   addDoc,
   doc, 
   updateDoc,
-  deleteDoc 
+  deleteDoc ,
+  onSnapshot
 } from 'firebase/firestore/lite'
 // import {collection, addDoc } from "firebase/firestore";
 import $ from 'jquery'
+import { display } from '@mui/system'
+import {  FiAlertCircle } from 'react-icons/fi';
+import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 // import { isObject } from 'cypress/types/lodash'
 export default function Home () {
   const [inputValue, setInputValue] = useState({
@@ -26,6 +31,7 @@ export default function Home () {
     soft_skill: '',
     desired_skill: ''
   })
+  const [idObject,setIdObject]=useState([{a:1},{actionOnly:"add"},{idD:1234}])
   const [onlyData, setOnlyData] = useState([])
   const [formerror, setFormError] = useState({})
 
@@ -39,6 +45,7 @@ export default function Home () {
 
     $('#listData').addClass('activeonly')
     $('#newData').removeClass('activeonly')
+    $('#newData').addClass('activeCursor')
 
     setNavData({ action1: 'showAllData' })
   }
@@ -47,8 +54,12 @@ export default function Home () {
     // $('#group').css('text-decoration','underline')
     $('#newData').addClass('activeonly')
     $('#listData').removeClass('activeonly')
+    $('#listData').addClass('activeCursor')
     // $('#group').css('border-bottom','1px solid white')
     // $('#group').css({borderBottom:'1px solid white',cursor:'none'})
+
+    setIdObject([{a:1},{actionOnly:"add"},{idD:1234}])
+
     setNavData({ action1: 'addAllData' })
   }
 
@@ -73,6 +84,7 @@ const  dataFiltered=idObject
 if(dataFiltered.length>0){
 
 if(dataFiltered[1].actionOnly=="EDIT"){
+  console.log("EDIT","EDITTT")
 
     setInputValue({
       ...inputValue,
@@ -91,14 +103,19 @@ if(dataFiltered[1].actionOnly=="EDIT"){
 
 
   else if(dataFiltered[1].actionOnly=="DELETE"){
+$("#imageParent").css("display","block")
+$("section").css("display","none")
+
+    console.log("deleted")
     async function deleteData (db) {
-    await deleteDoc(doc(db, "admin_testing", `${idObject[2].idD}`));
- return ("deleted")
+    const delete123=await deleteDoc(doc(db, "12345", `${idObject[2].idD}`));
+  return deleteData
     }
 
 const deleted=deleteData(db)
 if(deleted){
-  setNavData({action1: 'showAllData'})
+  setTimeout(()=>
+  showData(),100)
 }
 
 
@@ -107,23 +124,54 @@ if(deleted){
   }
 
 
+
+  else if(dataFiltered[1].actionOnly=="add"){
+
+setInputValue({
+
+
+  cv: null,
+  // textChange1: '',
+  job_title: '',
+  sub_title: '',
+  job_url: '',
+  experience: '',
+  location: '',
+  technical_skill: '',
+  soft_skill: '',
+  desired_skill: ''
+
+})
+
+  }
+
+
 }
-  }, [navData])
+  }, [idObject])
 
   //  const dataOrg = data.docs.map(doc => doc.data())
 
   useEffect(() => {
+    // $("#imageParent").css("display","block")
+    $("section").css("display","none")
+  
+    console.log("inner")
     async function getData (db) {
-      const citiesCol = collection(db, 'admin_testing')
+      const citiesCol = collection(db, '12345')
       const data = await getDocs(citiesCol)
 
       console.log(data, 'firebaseData')
 
       const dataOrg = data.docs.map(doc => {
         let original = doc.data()
+        // $("#imageParent").css("display","none")
+        // console.log("wating...")
+        // $("section").css("display","block")
 
         return Object.assign(original, { id_: doc.id })
       })
+      $("section").css("display","block")
+           $("#imageParent").css("display","none")
       setOnlyData(dataOrg)
     }
     getData(db)
@@ -150,10 +198,11 @@ if(deleted){
   useEffect(() => {
     if (Object.keys(formerror).length === 0 && isSubmit) {
       
-        if(idObject[1].actionOnly!="EDIT"){
+        if(idObject[1].actionOnly!="EDIT" && navData.action1 == 'addAllData'){
 
+console.log(inputValue,"addd")
       async function addData (db) {
-        const docRef = await addDoc(collection(db, 'admin_testing'), {
+        const docRef = await addDoc(collection(db, '12345'), {
           jobTitle: inputValue.job_title,
           subTitle: inputValue.sub_title,
           jobUrl: inputValue.job_url,
@@ -163,17 +212,24 @@ if(deleted){
           softSkill: inputValue.soft_skill,
           desiredSkill: inputValue.desired_skill
         })
-        console.log('Document written with ID: ', docRef.id)
+        return(docRef.id)
       }
 
 
-      addData(db)
+      let addDetail=addData(db)
+      if(addDetail){
+        console.log(addDetail,"addDetail")
+        setTimeout(()=>
+        showData(),500)
+        
+      }
+
     }
       else{
       async function editData (db) {
         console.log(idObject[2].idD,"idD")
 
-      const washingtonRef = doc(db, "admin_testing", `${idObject[2].idD}`);
+      const washingtonRef = doc(db, "12345", `${idObject[2].idD}`);
 
       // Set the "capital" field of the city 'DC'
     const  lol=await updateDoc(washingtonRef, {
@@ -195,8 +251,10 @@ if(deleted){
       
     }
     let edited=editData(db)
+    
     if (edited){
-      setNavData({action1: 'showAllData'})
+      setTimeout(()=>
+     showData(),500)
     }
   }
 
@@ -250,7 +308,7 @@ if(deleted){
     return error
   }
 
-  const [idObject,setIdObject]=useState([])
+  // const [idObject,setIdObject]=useState([{a:1},{actionOnly:"add"},{idD:1234}])
   function myHandle (e) {
     console.log(e)
     // console.log($('#sampleorder option:selected').data-amount);
@@ -272,7 +330,33 @@ if(deleted){
     setIdObject(dataFiltered)
 
     setNavData({action1:"addAllData"})
+    // $(".backgrounddd").css("filter","blur(2px)")
+    // $(".pop-up").css("display","block")
 
+
+    // $(".pop-up").css("display","none")
+    // $(".backgrounddd").css("filter","blur(0px)")
+
+
+  }
+  const deleteOn=()=>{
+//     $("#imageParent").css("display","block")
+// $("section").css("display","none")
+
+//     console.log("deleted")
+//     async function deleteData (db) {
+//     const delete123=await deleteDoc(doc(db, "12345", `${idObject[2].idD}`));
+//   return deleteData
+//     }
+
+// const deleted=deleteData(db)
+// if(deleted){
+//   setTimeout(()=>
+//   showData(),100)
+// }
+
+  }
+  const deleteOff=()=>{
 
   }
 
@@ -307,6 +391,9 @@ if(deleted){
           {/* <i className="fa fa-bars" id="fa__" style="color:white" onclick="showMenu()"></i> */}
         </nav>
       </main>
+      <div id='imageParent' className="loadingParent">
+          <img src={Skateboard.src} alt='Loading ....' />
+        </div>
       {navData.action1 == 'addAllData' && (
         <section className='sec-section'>
           <div className='text-left'>{
@@ -458,7 +545,13 @@ if(deleted){
       )}
       {navData.action1 == 'showAllData' && (
         <section className='third-sec sec-section'>
-          <div className='row'>
+        <div className='text-left'>
+        <h2>
+          Jobs
+        </h2>
+          
+          </div>
+          <div className='row' style={{marginTop:"18px"}}>
             <div className='col-md-4 borderFor bold'>
               <p> Name</p>
             </div>
@@ -527,6 +620,31 @@ if(deleted){
           })}
         </section>
       )}
+
+      <div className='pop-up'id='unblurred'>
+<div className='pop-up-inner'>
+<div className='icon'>
+< FiAlertCircle style={{color:"red",fontSize:"50px",textAlign:'center'}}/>
+</div>
+  <div className='delete'>
+  <p>Are you sure ?</p>
+
+  </div>
+
+
+  <div className='para'>
+  <p>Do you really want to delete these records ? </p>
+  <p id='in'> This process can not be undone</p>
+
+  </div>
+  <div className='confirmation'>
+  <button className='button1' onClick={deleteOn}>DELETE</button>
+  <button className='button2' onClick={deleteOff} >CANCEL</button>
+
+  </div>
+  </div>
+</div>
+
     </>
   )
 }

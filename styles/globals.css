@@ -18,7 +18,7 @@ top: 0;
 /* right: -400px; */
 position: fixed;
 background:white;
-border:1px dotted rgb(46, 42, 42);
+/* border:1px dotted rgb(46, 42, 42); */
 z-index: 10;
 /* height: 100vh; */
 overflow: hidden;
@@ -26,6 +26,9 @@ overflow: hidden;
 transition: all 1s ease-out;
 display: flex;
 flex-direction: column;
+padding-left: 0px !important;
+border: 1px ridge;
+gap:18px
 /* margin-top: 4.2rem; */
 }
 li{
@@ -34,7 +37,13 @@ li{
   text-decoration: none;
   color:#099;
   font-size: 12px;
-  margin-bottom: 22px;
+  /* margin-bottom: 22px; */
+  border-bottom: 1px ridge;
+  /* align-items: center; */
+  /* display:flex;
+  align-items: center; */
+  /* position: absolute; */
+  padding-bottom: 15px;
   
 
 
@@ -46,7 +55,8 @@ li a{
   text-decoration: none;
   color:#099 !important ;
   font-size: 18px;
-  font-weight:600
+  font-weight:600;
+  padding-left: 18px;
 
 }
 /* li a:hover{
@@ -61,7 +71,7 @@ li a{
 .photo-div{
   width:100px;
   height:40px;
-  margin-bottom: 35px;
+  margin-bottom: 15px;
 
 }
 .li-item a{
@@ -96,13 +106,17 @@ input:focus{
   margin-left:250px;
 
   margin-right:50px;
-  margin-top:70px
+  margin-top:80px
 }
 /* .relativeError {
   margin-bottom: 10px;
 } */
 .activeonly{
-  color:black !important
+  color:black !important;
+  cursor: none !important;
+}
+.activeCursor{
+  cursor: pointer;
 }
 .borderFor{
   border: 1px ridge ;
@@ -236,4 +250,137 @@ border-style: none;
 
  .action select option:hover{
 border-style: none;
+}
+
+.loadingParent{
+
+  color: white;
+  /* background: red; */
+  padding: 15px;
+  z-index: 10000;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+ 
+}
+.loadingParent img{
+  /* width:60px */
+}
+
+/* ....pop-up.......... */
+
+.pop-up{
+
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform:translateX(-50%);
+  background: #f5f5f5;
+  border-radius: 15px;
+  display: none;
+
+  /* width:50px */
+  /* z-index: 30; */
+  
+  
+  
+  
+
+}
+.pop-up-inner{
+  margin:15px
+}
+
+
+
+
+.pop-up .delete  {
+  text-align: center;
+ 
+
+
+}
+.pop-up .delete p {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.pop-up .para{
+  
+  text-align: center;
+  padding: 0px 15px;
+  margin-top: -10px;
+
+}
+.pop-up .para p{
+  font-size: 13px;
+
+}
+.pop-up .confirmation{
+  display: flex;
+  /* width: 50%; */
+  justify-content: center;
+  gap:50px
+}
+.pop-up .icon{
+  text-align: center;
+
+}
+#in{
+  margin-top: -15px;
+}
+.pop-up .confirmation .button1{
+background-color: red;
+color: white;
+border: none;
+padding: 5px 8px;
+border-radius: 2px;
+font-size: 10.4px;
+font-family: Arial, Helvetica, sans-serif;
+font-weight: bold;
+
+}
+.pop-up .confirmation .button2{
+  background-color: green;
+color: white;
+border:none;
+padding:5px 8px;
+border-radius: 2px;
+font-size: 10.4px;
+font-family: Arial, Helvetica, sans-serif;
+font-weight: bold;
+}
+
+.headingDash{
+  margin-top: 2rem;
+}
+.buttonLast{
+  position: relative;
+}
+
+
+.buttonName{
+  font-size: 15px;
+  /* font-weight: bold; */
+  opacity: 0.5px;
+  position: relative;
+  margin-top: 20px;
+  margin-left: 10px;
+  padding: 5px 20px 5px 25px;
+  background: goldenrod;
+  border: none;
+  color: black;
+  border-radius: 8px;
+
+}
+
+.buttonName .iconLast{
+  position: absolute;
+  top:8px;
+  left:8px;
+  /* color: white; */
+
 }
