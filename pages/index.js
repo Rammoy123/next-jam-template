@@ -29,7 +29,8 @@ export default function Home () {
     location: '',
     technical_skill: '',
     soft_skill: '',
-    desired_skill: ''
+    desired_skill: '',
+    status:"Active"
   })
   const [idObject,setIdObject]=useState([{a:1},{actionOnly:"add"},{idD:1234}])
   const [onlyData, setOnlyData] = useState([])
@@ -62,6 +63,8 @@ export default function Home () {
 
     setNavData({ action1: 'addAllData' })
   }
+
+
 
   const changeBt = e => {
     console.log(e)
@@ -96,7 +99,8 @@ if(dataFiltered[1].actionOnly=="EDIT"){
       location: dataFiltered[0].location,
       technical_skill: dataFiltered[0].technicalSkill,
       soft_skill: dataFiltered[0].softSkill,
-      desired_skill: dataFiltered[0].desiredSkill
+      desired_skill: dataFiltered[0].desiredSkill,
+      status:dataFiltered[0].status
     })
   }
 
@@ -139,7 +143,8 @@ setInputValue({
   location: '',
   technical_skill: '',
   soft_skill: '',
-  desired_skill: ''
+  desired_skill: '',
+  status:'Active'
 
 })
 
@@ -210,7 +215,8 @@ console.log(inputValue,"addd")
           location: inputValue.location,
           technicalSkill: inputValue.technical_skill,
           softSkill: inputValue.soft_skill,
-          desiredSkill: inputValue.desired_skill
+          desiredSkill: inputValue.desired_skill,
+          status:inputValue.status
         })
         return(docRef.id)
       }
@@ -240,7 +246,8 @@ console.log(inputValue,"addd")
         location: inputValue.location,
         technicalSkill: inputValue.technical_skill,
         softSkill: inputValue.soft_skill,
-        desiredSkill: inputValue.desired_skill
+        desiredSkill: inputValue.desired_skill,
+        status:inputValue.status
 
         }
         
@@ -308,7 +315,7 @@ console.log(inputValue,"addd")
     return error
   }
 
-  // const [idObject,setIdObject]=useState([{a:1},{actionOnly:"add"},{idD:1234}])
+  const [deleteObject,setDeleteObject]=useState([])
   function myHandle (e) {
     console.log(e)
     // console.log($('#sampleorder option:selected').data-amount);
@@ -326,10 +333,21 @@ console.log(inputValue,"addd")
     const dataFiltered = onlyData.filter(arr => arr.id_ == setId)
     dataFiltered.push({actionOnly:action})
     dataFiltered.push({idD:setId})
+    if(action=="EDIT"){
     console.log(dataFiltered)
     setIdObject(dataFiltered)
 
     setNavData({action1:"addAllData"})
+    }
+    else if(action=="DELETE"){
+          $(".third-sec").css("filter","blur(2px)")
+          $("body").css("background","rgba(0,0,0,.5)")
+          $("third-sec").css("background","rgba(0,0,0,.5)")
+    $(".pop-up").css("display","block")
+    setDeleteObject(dataFiltered)
+
+
+    }
     // $(".backgrounddd").css("filter","blur(2px)")
     // $(".pop-up").css("display","block")
 
@@ -340,23 +358,110 @@ console.log(inputValue,"addd")
 
   }
   const deleteOn=()=>{
-//     $("#imageParent").css("display","block")
-// $("section").css("display","none")
 
-//     console.log("deleted")
-//     async function deleteData (db) {
-//     const delete123=await deleteDoc(doc(db, "12345", `${idObject[2].idD}`));
-//   return deleteData
-//     }
+   
+        $(".pop-up").css("display","none")
+    $(".third-sec").css("filter","blur(0px)")
+    $(".third-sec").css("background","transparent")
+    $("body").css("background","transparent")
+    setIdObject(deleteObject)
 
-// const deleted=deleteData(db)
-// if(deleted){
-//   setTimeout(()=>
-//   showData(),100)
-// }
 
   }
   const deleteOff=()=>{
+    $(".pop-up").css("display","none")
+    $(".third-sec").css("filter","blur(0px)")
+    $(".third-sec").css("background","transparent")
+    $("body").css("background","transparent")
+
+  }
+
+  const activeChange=(e)=>{
+
+    
+    console.log(checker,"checkerOnly")
+  const adId=e.target.id
+  const dataFiltered = onlyData.filter(arr => arr.id_ == adId)
+  const originalData=dataFiltered[0]
+  console.log(e.target.innerText,"innerText")
+if(e.target.innerText=="Active"){
+  console.log(e.target.innerText,"diidActive")
+
+  Object.assign(originalData,{status:"InActive"})
+  console.log(originalData,"originalllldidactive")
+  
+  // setInputValue({...inputValue,status:"InActive"})
+  setChecker(true)
+  console.log(checker,"do")
+
+}
+else if(e.target.innerText=="InActive"){
+  console.log(e.target.innerText,"diidd")
+ 
+
+  // setInputValue({...inputValue,status:"Active"})
+  Object.assign(originalData,{status:"Active"})
+  console.log(originalData,"originallll")
+  setChecker(true)
+  console.log(checker,"do")
+
+}
+console.log(checker,"checkerOnly12")
+
+if(checker){
+  console.log(checker,"checkerOnly12")
+async function editData (db) {
+ 
+
+const washingtonRef = doc(db, "12345", `${adId}`);
+
+// Set the "capital" field of the city 'DC'
+const  lol=await updateDoc(washingtonRef, {
+  jobTitle: originalData.jobTitle,
+  subTitle: originalData.subTitle,
+  jobUrl: originalData.jobUrl,
+  experience: originalData.experience,
+  location: originalData.location,
+  technicalSkill: originalData.technicalSkill,
+  softSkill: originalData.softSkill,
+  desiredSkill: originalData.desiredSkill,
+  status:originalData.status
+
+  }
+  
+
+
+);
+return lol
+
+}
+let edited=editData(db)
+
+if (edited){
+
+  console.log(edited)
+setTimeout(()=>
+
+
+showData(),500)
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   }
 
@@ -590,7 +695,7 @@ console.log(inputValue,"addd")
                   <p>{arr.location}</p>
                 </div>
                 <div className='col-md-2 borderFor '>
-                  <p>active</p>
+                  <p onClick={activeChange} id={arr.id_} className='active-block'>{arr.status}</p>
                 </div>
 
                 <div className='col-md-2 borderFor action '>
@@ -620,6 +725,8 @@ console.log(inputValue,"addd")
           })}
         </section>
       )}
+
+
 
       <div className='pop-up'id='unblurred'>
 <div className='pop-up-inner'>
