@@ -1,7 +1,9 @@
 import bitpastel from '../public/assets/bitpastel.png'
-import { useState, useEffect } from 'react'
+import { useState, useEffect,useRef  } from 'react'
 import { db } from '@components/Firebase-config'
 import Skateboard from '../public/assets/Skateboarding (1).gif'
+import Link from 'next/link'
+
 import {
   getFirestore,
   collection,
@@ -19,6 +21,29 @@ import {  FiAlertCircle } from 'react-icons/fi';
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 // import { isObject } from 'cypress/types/lodash'
 export default function Home () {
+  const focus = useRef()
+
+
+  useEffect(() => {
+    function handleClickOutside (event) {
+      console.log(event.target.role,"roleee")
+      // console.log(focus.current)
+      if (focus.current && !focus.current.contains(event.target)) {
+       
+        $(".pop-up").css("display","none")
+    $(".third-sec").css("filter","blur(0px)")
+    $(".third-sec").css("background","transparent")
+    $("body").css("background","transparent")
+  console.log("clicked outside")
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [focus])
+
   const [inputValue, setInputValue] = useState({
     cv: null,
     // textChange1: '',
@@ -108,7 +133,7 @@ if(dataFiltered[1].actionOnly=="EDIT"){
 
   else if(dataFiltered[1].actionOnly=="DELETE"){
 $("#imageParent").css("display","block")
-$("section").css("display","none")
+// $("section").css("display","none")
 
     console.log("deleted")
     async function deleteData (db) {
@@ -158,7 +183,7 @@ setInputValue({
 
   useEffect(() => {
     // $("#imageParent").css("display","block")
-    $("section").css("display","none")
+    // $("section").css("display","none")
   
     console.log("inner")
     async function getData (db) {
@@ -175,8 +200,11 @@ setInputValue({
 
         return Object.assign(original, { id_: doc.id })
       })
-      $("section").css("display","block")
+      // $("section").css("display","block")
+      if(data && dataOrg){
            $("#imageParent").css("display","none")
+      }
+           console.log(dataOrg,"dataOrggg")
       setOnlyData(dataOrg)
     }
     getData(db)
@@ -358,17 +386,106 @@ console.log(inputValue,"addd")
 
   }
   const deleteOn=()=>{
-
+console.log(deleteObject,"lollll")
    
         $(".pop-up").css("display","none")
     $(".third-sec").css("filter","blur(0px)")
     $(".third-sec").css("background","transparent")
     $("body").css("background","transparent")
+    if(deleteObject[1].actionOnly=="DELETE"){
     setIdObject(deleteObject)
+    }
+
+    else {
+      // $("section").css("display","block")
+      // $("#imageParent").css("display","block")
+
+const originalData=deleteObject[3].data
+
+      if(deleteObject[2].state=="ACTIVE"){
+        
+        
+        
+        Object.assign(originalData,{status:"Active"})
+        // blank.push({data:originalData})
+        
+        // setDeleteObject(blank)
+       
+        setChecker(true)
+      
+      console.log(checker,"do")
+    
+    }
+    else if(deleteObject[2].state=="INACTIVE"){
+     
+     
+     
+      
+      
+      
+      Object.assign(originalData,{status:"InActive"})
+      
+    
+    
+      setChecker(true)
+      
+    }
+
+
+    if(checker){
+      console.log(originalData,"checkerOnly12")
+     
+    async function editData (db) {
+     
+    
+    const washingtonRef = doc(db, "12345", `${deleteObject[0].idD}`);
+    
+  
+    const  lol=await updateDoc(washingtonRef, {
+      jobTitle: originalData.jobTitle,
+      subTitle: originalData.subTitle,
+      jobUrl: originalData.jobUrl,
+      experience: originalData.experience,
+      location: originalData.location,
+      technicalSkill: originalData.technicalSkill,
+      softSkill: originalData.softSkill,
+      desiredSkill: originalData.desiredSkill,
+      status:originalData.status
+    
+      }
+      
+    
+    
+    );
+    return lol
+    
+    }
+    let edited=editData(db)
+    
+    if (edited){
+      $("#imageParent").css("z-index","-1")
+      const dataOf=[]
+      setDeleteObject(dataOf)
+      console.log(edited)
+    setTimeout(()=>
+  {
+   
+    
+    
+    setNavData({ action1: 'showAllData' })
+  }
+    ,500)
+    }
+    }
+
+
+    }
 
 
   }
   const deleteOff=()=>{
+    const dataOf=[]
+    setDeleteObject(dataOf)
     $(".pop-up").css("display","none")
     $(".third-sec").css("filter","blur(0px)")
     $(".third-sec").css("background","transparent")
@@ -376,76 +493,106 @@ console.log(inputValue,"addd")
 
   }
 
-  const activeChange=(e)=>{
 
-    
-    console.log(checker,"checkerOnly")
-  const adId=e.target.id
+
+
+  const activeChange=(e)=>{
+    $(".third-sec").css("filter","blur(2px)")
+    $("body").css("background","rgba(0,0,0,.5)")
+    $("third-sec").css("background","rgba(0,0,0,.5)")
+$(".pop-up").css("display","block")
+
+
+const blank=[]
+
+
+
+
+
+
+
+
+const adId=e.target.id
+
+blank.push({idD:adId})
+blank.push({actionOnly:"notDelete"})
+  setDeleteObject(blank)
+  
+
+  
   const dataFiltered = onlyData.filter(arr => arr.id_ == adId)
   const originalData=dataFiltered[0]
-  console.log(e.target.innerText,"innerText")
-if(e.target.innerText=="Active"){
-  console.log(e.target.innerText,"diidActive")
-
-  Object.assign(originalData,{status:"InActive"})
-  console.log(originalData,"originalllldidactive")
-  
   // setInputValue({...inputValue,status:"InActive"})
-  setChecker(true)
-  console.log(checker,"do")
+  console.log(e.target.innerText,"innerText")
+  if(e.target.innerText=="Active"){
+    blank.push({state:"INACTIVE"})
+    
+    
+    // Object.assign(originalData,{status:"InActive"})
+    blank.push({data:originalData})
+    
+    setDeleteObject(blank)
+   
+   
+  
+
 
 }
 else if(e.target.innerText=="InActive"){
-  console.log(e.target.innerText,"diidd")
+  
+  blank.push({state:"ACTIVE"})
+  
+  
+  
+  
+  // Object.assign(originalData,{state:"Active"})
+  blank.push({data:originalData})
+  
+  
+  setDeleteObject(blank)
  
-
-  // setInputValue({...inputValue,status:"Active"})
-  Object.assign(originalData,{status:"Active"})
-  console.log(originalData,"originallll")
-  setChecker(true)
-  console.log(checker,"do")
-
+  
 }
-console.log(checker,"checkerOnly12")
-
-if(checker){
-  console.log(checker,"checkerOnly12")
-async function editData (db) {
+// if(checker){
+//   console.log(checker,"checkerOnly12")
+// async function editData (db) {
  
 
-const washingtonRef = doc(db, "12345", `${adId}`);
+// const washingtonRef = doc(db, "12345", `${adId}`);
 
-// Set the "capital" field of the city 'DC'
-const  lol=await updateDoc(washingtonRef, {
-  jobTitle: originalData.jobTitle,
-  subTitle: originalData.subTitle,
-  jobUrl: originalData.jobUrl,
-  experience: originalData.experience,
-  location: originalData.location,
-  technicalSkill: originalData.technicalSkill,
-  softSkill: originalData.softSkill,
-  desiredSkill: originalData.desiredSkill,
-  status:originalData.status
+// // Set the "capital" field of the city 'DC'
+// const  lol=await updateDoc(washingtonRef, {
+//   jobTitle: originalData.jobTitle,
+//   subTitle: originalData.subTitle,
+//   jobUrl: originalData.jobUrl,
+//   experience: originalData.experience,
+//   location: originalData.location,
+//   technicalSkill: originalData.technicalSkill,
+//   softSkill: originalData.softSkill,
+//   desiredSkill: originalData.desiredSkill,
+//   status:originalData.status
 
-  }
+//   }
   
 
 
-);
-return lol
+// );
+// return lol
 
-}
-let edited=editData(db)
+// }
+// let edited=editData(db)
 
-if (edited){
+// if (edited){
 
-  console.log(edited)
-setTimeout(()=>
+//   console.log(edited)
+// setTimeout(()=>
 
 
-showData(),500)
-}
-}
+// showData(),500)
+// }
+// }
+
+
 
 
 
@@ -474,20 +621,23 @@ showData(),500)
           <ul className='ul' id='uls'>
             <li>
               <div className='photo-div'>
-                <a className='photo-a'>
+              <Link href={{pathname:'/'}}>
+
+                <a className='photo-a' >
                   <img src={bitpastel.src} className='image-last' />
                 </a>
+              </Link>
               </div>
             </li>
 
             {/* <i className="fa fa-times" onclick="hideMenu()" > </i>  */}
             <li className='li-item'>
-              <a id='newData' onClick={addData}>
+              <a className='activeCursor' id='newData' onClick={addData}>
                 Add New Job
               </a>
             </li>
             <li className='li-item'>
-              <a id='listData' onClick={showData}>
+              <a className='activeonly' id='listData' onClick={showData}>
                 Job List
               </a>
             </li>
@@ -695,7 +845,7 @@ showData(),500)
                   <p>{arr.location}</p>
                 </div>
                 <div className='col-md-2 borderFor '>
-                  <p onClick={activeChange} id={arr.id_} className='active-block'>{arr.status}</p>
+                  <p onClick={activeChange} id={arr.id_} className='active-block activeCursor'>{arr.status}</p>
                 </div>
 
                 <div className='col-md-2 borderFor action '>
@@ -727,8 +877,8 @@ showData(),500)
       )}
 
 
-
-      <div className='pop-up'id='unblurred'>
+      
+      <div className='pop-up'id='unblurred' ref={focus}>
 <div className='pop-up-inner'>
 <div className='icon'>
 < FiAlertCircle style={{color:"red",fontSize:"50px",textAlign:'center'}}/>
@@ -737,18 +887,45 @@ showData(),500)
   <p>Are you sure ?</p>
 
   </div>
-
+{
+  (deleteObject.length>0) &&(
+    (deleteObject[0].actionOnly=="DELETE") ?(
 
   <div className='para'>
   <p>Do you really want to delete these records ? </p>
   <p id='in'> This process can not be undone</p>
 
   </div>
-  <div className='confirmation'>
-  <button className='button1' onClick={deleteOn}>DELETE</button>
-  <button className='button2' onClick={deleteOff} >CANCEL</button>
+    ):( (deleteObject[0].actionOnly!="DELETE") &&(
+      <div className='para'>
+  <p>Do you really want to<b style={{fontSize:'11px'}}> <i>{ deleteObject[2].state} {' '}</i> </b> this record </p>
+  <p id='in'> This process can not be undone</p>
 
   </div>
+
+    ))
+  )
+}
+  {console.log((deleteObject),"deleteObj")}
+  {
+    (deleteObject.length>0) &&(
+    (deleteObject[1].actionOnly=="DELETE") ?(
+  <div className='confirmation'>
+  <button className='button1 activeCursor' onClick={deleteOn}>DELETE</button>
+  <button className='button2 activeCursor' onClick={deleteOff} >CANCEL</button>
+
+  </div>) :( (deleteObject[1].actionOnly!="DELETE") && (
+    
+    <div className='confirmation'>
+    {console.log("actionOn")}
+  <button className='button1 activeCursor' onClick={deleteOn}>{deleteObject[2].state}</button>
+  <button className='button2 activeCursor' onClick={deleteOff} >CANCEL</button>
+
+  </div>
+  )
+  )
+    )
+  }
   </div>
 </div>
 

@@ -6,6 +6,7 @@ body {
     Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 /* background:rgba(0,0,0,.5) ; */
   }
+  
 
 * {
   box-sizing: border-box;
@@ -114,10 +115,10 @@ input:focus{
 } */
 .activeonly{
   color:black !important;
-  cursor: none !important;
+  cursor: text !important;
 }
 .activeCursor{
-  cursor: pointer;
+  cursor: default;
 }
 .borderFor{
   border: 1px ridge ;
@@ -230,7 +231,7 @@ input:focus{
  .action select{
 position: absolute;
 /* left:85px; */
-
+border:none;
 width: 20px;
 top:10.1px;
 height: 37px;
@@ -239,8 +240,9 @@ color: white;
 font-size: 12px;
 border-top-right-radius: 8px;
 border-bottom-right-radius: 8px;
-right:33px;
+right:35px;
 outline:none;
+
 
 
 }
